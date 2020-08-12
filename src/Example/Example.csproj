@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Example</AssemblyName>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <PackAsTool>true</PackAsTool>
+    <PackageId>dotnet-example</PackageId>
+    <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
+    <ToolCommandName>dotnet-example</ToolCommandName>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package Information">
+    <Description>A dotnet tool to run examples.</Description>
+    <Authors>Patrik Svensson</Authors>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/patriksvensson/dotnet-example</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/patriksvensson/dotnet-example</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="examples\**" />
+    <EmbeddedResource Remove="examples\**" />
+    <None Remove="examples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="All" Version="2.3.0" />
+    <PackageReference Include="Spectre.Cli" Version="0.36.1-preview.0.9" />
+    <PackageReference Include="Spectre.IO" Version="0.1.0" />
+  </ItemGroup>
+
+</Project>
