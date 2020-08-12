@@ -35,13 +35,13 @@ namespace Example
 
             if (result.Count == 0)
             {
-                AnsiConsole.Markup("[red]Error:[/] The example [blue]{0}[/] could not be found.", name);
+                AnsiConsole.Markup("[red]Error:[/] The example [underline]{0}[/] could not be found.", name);
                 return null;
             }
 
             if (result.Count > 1)
             {
-                AnsiConsole.Markup("[red]Error:[/] Found multiple examples called [blue]{0}[/].", name);
+                AnsiConsole.Markup("[red]Error:[/] Found multiple examples called [underline]{0}[/].", name);
                 return null;
             }
 
@@ -51,18 +51,21 @@ namespace Example
         public IReadOnlyList<ProjectInformation> FindExamples()
         {
             var result = new List<ProjectInformation>();
-            foreach (var example in FindProjects())
+
+            var examples = FindProjects("examples").Concat(FindProjects("samples"));
+            foreach (var example in examples)
             {
                 result.Add(_parser.Parse(example));
             }
+
             return result;
         }
 
-        private IReadOnlyList<FilePath> FindProjects()
+        private IEnumerable<FilePath> FindProjects(string folder)
         {
-            var root = new DirectoryPath($"examples").MakeAbsolute(_environment);
+            var root = new DirectoryPath(folder).MakeAbsolute(_environment);
             var globberSettings = new GlobberSettings { Comparer = new PathComparer(false), Root = root };
-            return _globber.Match($"**/*.csproj", globberSettings).OfType<FilePath>().ToList();
+            return _globber.Match($"**/*.csproj", globberSettings).OfType<FilePath>();
         }
     }
 }
