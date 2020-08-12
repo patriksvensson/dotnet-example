@@ -50,10 +50,10 @@ To change the name and description of how an example is listed, edit it's `cspro
 </PropertyGroup>
 ```
 
+If no name is set in the csproj file, the project name will be used.
+
 ```
 > dotnet example list
 
 Foo    This is the description of the example.
 ```
-
-If no name is set in the csproj file, the project name will be used.
