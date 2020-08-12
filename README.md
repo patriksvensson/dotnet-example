@@ -13,8 +13,6 @@ A dotnet tool to list and run examples similar to `cargo run --example`.
 ```
 > dotnet example
 
-Examples
-
 Colors    Demonstrates how to use colors in the console.
 Grid      Demonstrates how to render grids in a console.
 Table     Demonstrates how to render items in panels.
@@ -36,9 +34,9 @@ Table     Demonstrates how to render tables in a console.
 
 ## Conventions
 
-The convention is simple, if there is an `examples` folder in the directory the
-tool is executed in, it will fetch all csproj files and find the best match to
-the query.
+The convention is simple, if there is an `examples` or `samples` folder 
+in the directory the tool is executed in, it will fetch all csproj files 
+and find the best match to the query.
 
 ## Example settings
 

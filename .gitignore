@@ -5,6 +5,7 @@
 [Pp]ackages/
 /.artifacts/
 src/Example/examples
+src/Example/samples
 /[Tt]ools/
 
 # Cakeup

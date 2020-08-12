@@ -21,12 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="examples2\**" />
     <Compile Remove="examples\**" />
-    <EmbeddedResource Remove="examples2\**" />
+    <Compile Remove="samples\**" />
     <EmbeddedResource Remove="examples\**" />
-    <None Remove="examples2\**" />
+    <EmbeddedResource Remove="samples\**" />
     <None Remove="examples\**" />
+    <None Remove="samples\**" />
   </ItemGroup>
 
   <ItemGroup>
