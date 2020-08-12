@@ -1,6 +1,6 @@
 # dotnet example
 
-A dotnet tool to list and run examples.
+A dotnet tool to list and run examples similar to `cargo run --example`.
 
 ## Installing
 
@@ -38,3 +38,22 @@ Table     Demonstrates how to render tables in a console.
 The convention is simple, if there is an `examples` folder in the directory the
 tool is executed in, it will fetch all csproj files and find the best match to
 the query.
+
+## Example settings
+
+To change the name and description of how an example is listed, edit it's `csproj` file, and add the following section:
+
+```csharp
+<PropertyGroup>
+  <Title>Foo</Title>
+  <Description>This is the description of the example.</Description>
+</PropertyGroup>
+```
+
+```
+> dotnet example list
+
+Foo    This is the description of the example.
+```
+
+If no name is set in the csproj file, the project name will be used.
