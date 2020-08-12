@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -21,8 +21,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="examples2\**" />
     <Compile Remove="examples\**" />
+    <EmbeddedResource Remove="examples2\**" />
     <EmbeddedResource Remove="examples\**" />
+    <None Remove="examples2\**" />
     <None Remove="examples\**" />
   </ItemGroup>
 

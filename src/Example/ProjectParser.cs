@@ -1,4 +1,4 @@
-﻿using Spectre.IO;
+using Spectre.IO;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -47,15 +47,6 @@ namespace Example
                 if (titleElement != null)
                 {
                     name = titleElement.Value;
-                }
-                else
-                {
-                    // Got a package ID?
-                    var packageIdElement = xml.Root.XPathSelectElement("//PackageId");
-                    if (packageIdElement != null)
-                    {
-                        name = packageIdElement.Value;
-                    }
                 }
 
                 return new ProjectInformation

@@ -1,4 +1,4 @@
-﻿using Example.Commands;
+using Example.Commands;
 using Spectre.Cli;
 using System.Threading.Tasks;
 
@@ -8,11 +8,10 @@ namespace Example
     {
         public static async Task<int> Main(string[] args)
         {
-            var app = new CommandApp<RunCommand>();
+            var app = new CommandApp<DefaultCommand>();
             app.Configure(config =>
             {
-                config.AddCommand<RunCommand>("run");
-                config.AddCommand<ListCommand>("list");
+                config.SetApplicationName("dotnet example");
             });
 
             return await app.RunAsync(args);
