@@ -3,23 +3,20 @@ using Spectre.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Environment = Spectre.IO.Environment;
 
 namespace Example
 {
     public sealed class ExampleFinder
     {
-        private readonly IFileSystem _fileSystem;
         private readonly IEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ProjectParser _parser;
 
-        public ExampleFinder()
+        public ExampleFinder(IFileSystem fileSystem, IEnvironment environment, IGlobber globber)
         {
-            _fileSystem = new FileSystem();
-            _environment = new Environment();
-            _globber = new Globber(_fileSystem, _environment);
-            _parser = new ProjectParser();
+            _environment = environment;
+            _globber = globber;
+            _parser = new ProjectParser(fileSystem);
         }
 
         public ProjectInformation FindExample(string name)

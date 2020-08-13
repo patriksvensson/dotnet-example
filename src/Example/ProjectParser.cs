@@ -20,9 +20,9 @@ namespace Example
     {
         private readonly IFileSystem _fileSystem;
 
-        public ProjectParser()
+        public ProjectParser(IFileSystem fileSystem)
         {
-            _fileSystem = new FileSystem();
+            _fileSystem = fileSystem;
         }
 
         public ProjectInformation Parse(FilePath path)

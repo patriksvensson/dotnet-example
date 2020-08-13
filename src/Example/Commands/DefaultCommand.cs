@@ -1,5 +1,6 @@
 using Spectre.Cli;
 using Spectre.Console;
+using Spectre.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -8,6 +9,7 @@ namespace Example.Commands
     public sealed class DefaultCommand : Command<DefaultCommand.Settings>
     {
         private readonly ExampleFinder _finder;
+        private readonly SourceLister _lister;
 
         public sealed class Settings : CommandSettings
         {
@@ -18,11 +20,20 @@ namespace Example.Commands
             [CommandOption("-l|--list")]
             [Description("Lists all available examples")]
             public bool List { get; set; }
+
+            [CommandOption("-s|--source")]
+            [Description("Show example source code")]
+            public bool Source { get; set; }
         }
 
         public DefaultCommand()
         {
-            _finder = new ExampleFinder();
+            var fileSystem = new FileSystem();
+            var environment = new Environment();
+            var globber = new Globber(fileSystem, environment);
+
+            _finder = new ExampleFinder(fileSystem, environment, globber);
+            _lister = new SourceLister(fileSystem, globber);
         }
 
         public override int Execute(CommandContext context, Settings settings)
@@ -30,6 +41,11 @@ namespace Example.Commands
             if (settings.List || string.IsNullOrWhiteSpace(settings.Name))
             {
                 return List();
+            }
+
+            if (settings.Source)
+            {
+                return ViewSource(settings.Name);
             }
 
             return Run(settings.Name);
@@ -57,6 +73,19 @@ namespace Example.Commands
 
             AnsiConsole.WriteLine();
             AnsiConsole.Render(grid);
+
+            return 0;
+        }
+
+        private int ViewSource(string name)
+        {
+            var example = _finder.FindExample(name);
+            if (example == null)
+            {
+                return -1;
+            }
+
+            _lister.List(example.Path);
 
             return 0;
         }

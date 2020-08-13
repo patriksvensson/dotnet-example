@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
     <PackageReference Include="MinVer" PrivateAssets="All" Version="2.3.0" />
     <PackageReference Include="Spectre.Cli" Version="0.36.1-preview.0.9" />
     <PackageReference Include="Spectre.IO" Version="0.1.0" />
