@@ -85,7 +85,7 @@ namespace Example.Commands
                 return -1;
             }
 
-            _lister.List(example.Path);
+            _lister.List(example);
 
             return 0;
         }

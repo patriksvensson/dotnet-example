@@ -19,13 +19,12 @@ namespace Example
             _globber = globber;
         }
 
-        public void List(FilePath project)
+        public int List(ProjectInformation project)
         {
-            var directory = project.GetDirectory();
-            var result = _globber.Match("**/Program.cs", new GlobberSettings { Root = directory }).OfType<FilePath>().FirstOrDefault();
+            var result = FindProgram(project);
             if (result == null)
             {
-                throw new InvalidOperationException("Could not find source.");
+                return -1;
             }
 
             using (var stream = _fileSystem.File.OpenRead(result.FullPath))
@@ -46,6 +45,28 @@ namespace Example
 
                 AnsiConsole.Render(table);
             }
+
+            return 0;
+        }
+
+        private FilePath FindProgram(ProjectInformation project)
+        {
+            var directory = project.Path.GetDirectory();
+            var result = _globber.Match("**/Program.cs", new GlobberSettings { Root = directory }).OfType<FilePath>().ToList();
+
+            if (result.Count == 0)
+            {
+                AnsiConsole.Markup("[red]Error:[/] Could not find Program.cs for example [underline]{0}[/].", project.Name);
+                return null;
+            }
+
+            if (result.Count > 1)
+            {
+                AnsiConsole.Markup("[red]Error:[/] Found multiple Program.cs for example [underline]{0}[/].", project.Name);
+                return null;
+            }
+
+            return result.First();
         }
     }
 }
