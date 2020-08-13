@@ -32,6 +32,31 @@ Table     Demonstrates how to render tables in a console.
 └──────────┴──────────┴────────┘
 ```
 
+## Showing example source code
+
+```
+> dotnet example table --source
+╭────┬────────────────────────────────────────────────────────────╮
+│ 1  │ using Spectre.Console;                                     │
+│ 2  │                                                            │
+│ 3  │ namespace TableExample                                     │
+│ 4  │ {                                                          │
+│ 5  │     class Program                                          │
+│ 6  │     {                                                      │
+│ 7  │         static void Main(string[] args)                    │
+│ 8  │         {                                                  │
+│ 9  │             var table = new Table();                       │
+│ 10 │             table.AddColumn(new TableColumn("[u]Foo[/]")); │
+│ 11 │             table.AddColumn(new TableColumn("[u]Bar[/]")); │
+│ 12 │             table.AddColumn(new TableColumn("[u]Baz[/]")); │
+│ 13 │             table.AddRow("Hello", "[red]World![/]", "");   │
+│ 14 │             AnsiConsole.Render(table);                     │
+│ 15 │         }                                                  │
+│ 16 │     }                                                      │
+│ 17 │ }                                                          │
+╰────┴────────────────────────────────────────────────────────────╯
+```
+
 ## Conventions
 
 The convention is simple, if there is an `examples` or `samples` folder 
