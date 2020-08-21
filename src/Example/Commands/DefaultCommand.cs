@@ -3,6 +3,7 @@ using Spectre.Console;
 using Spectre.IO;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Example.Commands
 {
@@ -26,12 +27,15 @@ namespace Example.Commands
             public bool Source { get; set; }
         }
 
+        private readonly IEnvironment _environment;
+
         public DefaultCommand()
         {
             var fileSystem = new FileSystem();
             var environment = new Environment();
             var globber = new Globber(fileSystem, environment);
 
+            _environment = environment;
             _finder = new ExampleFinder(fileSystem, environment, globber);
             _lister = new SourceLister(fileSystem, globber);
         }
@@ -48,7 +52,7 @@ namespace Example.Commands
                 return ViewSource(settings.Name);
             }
 
-            return Run(settings.Name);
+            return Run(settings.Name, context);
         }
 
         private int List()
@@ -60,15 +64,21 @@ namespace Example.Commands
                 return 0;
             }
 
-            var grid = new Grid();
-            grid.AddColumn(new GridColumn() { NoWrap = true, Padding = new Padding(2, 4) });
-            grid.AddColumn();
+            var grid = new Table { Border = BorderKind.Square };
+            grid.AddColumn(new TableColumn("Name") { NoWrap = true, });
+            grid.AddColumn(new TableColumn("Path") { NoWrap = true, });
+            grid.AddColumn(new TableColumn("Description"));
 
-            AnsiConsole.MarkupLine("[underline]Examples[/]");
-
-            foreach (var example in examples)
+            foreach (var example in examples.OrderBy(e => e.Order))
             {
-                grid.AddRow($"[blue]{example.Name}[/]", $"{example.Description}");
+                var path = _environment.WorkingDirectory.GetRelativePath(example.Path);
+
+                grid.AddRow(
+                    $"[underline blue]{example.Name}[/]",
+                    $"[grey]{path.FullPath}[/]",
+                    !string.IsNullOrEmpty(example.Description)
+                        ? $"{example.Description}"
+                        : "[grey]N/A[/]");
             }
 
             AnsiConsole.WriteLine();
@@ -90,7 +100,7 @@ namespace Example.Commands
             return 0;
         }
 
-        private int Run(string name)
+        private int Run(string name, CommandContext context)
         {
             var example = _finder.FindExample(name);
             if (example == null)
@@ -98,10 +108,20 @@ namespace Example.Commands
                 return -1;
             }
 
+            var arguments = "run";
+            if (context.Remaining.Raw.Count > 0)
+            {
+                var remaining = string.Join(" ", context.Remaining.Raw);
+                arguments += $" -- {remaining}";
+            }
+
             // Run the example using "dotnet run"
-            ProcessStartInfo info = new ProcessStartInfo("dotnet");
-            info.Arguments = "run";
-            info.WorkingDirectory = example.GetWorkingDirectory().FullPath;
+            var info = new ProcessStartInfo("dotnet")
+            {
+                Arguments = arguments,
+                WorkingDirectory = example.GetWorkingDirectory().FullPath
+            };
+
             var process = Process.Start(info);
             process.WaitForExit();
 

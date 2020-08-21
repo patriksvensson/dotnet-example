@@ -9,6 +9,7 @@ namespace Example
         public string Name { get; set; }
         public FilePath Path { get; set; }
         public string Description { get; set; }
+        public int Order { get; set; }
 
         public DirectoryPath GetWorkingDirectory()
         {
@@ -34,6 +35,7 @@ namespace Example
 
                 var name = path.GetFilenameWithoutExtension().FullPath;
                 var description = string.Empty;
+                var order = 1000;
 
                 // Got a description?
                 var descriptionElement = xml.Root.XPathSelectElement("//Description");
@@ -49,11 +51,19 @@ namespace Example
                     name = titleElement.Value;
                 }
 
+                // Got a order?
+                var orderElement = xml.Root.XPathSelectElement("//ExampleOrder");
+                if (orderElement != null)
+                {
+                    int.TryParse(orderElement.Value, out order);
+                }
+
                 return new ProjectInformation
                 {
                     Name = name,
                     Path = path,
-                    Description = description
+                    Description = description,
+                    Order = order,
                 };
             }
         }
