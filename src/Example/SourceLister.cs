@@ -40,6 +40,7 @@ namespace Example
                     lineNumber++;
                 }
 
+                AnsiConsole.WriteLine();
                 AnsiConsole.Render(table);
             }
 
