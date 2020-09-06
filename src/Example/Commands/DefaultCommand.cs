@@ -64,7 +64,7 @@ namespace Example.Commands
                 return 0;
             }
 
-            var grid = new Table { Border = BorderKind.Rounded };
+            var grid = new Table { BorderKind = BorderKind.Rounded };
             grid.AddColumn(new TableColumn("Name") { NoWrap = true, });
             grid.AddColumn(new TableColumn("Path") { NoWrap = true, });
             grid.AddColumn(new TableColumn("Description"));

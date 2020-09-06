@@ -43,7 +43,7 @@ namespace Example
             {
                 if (token.LeadingTrivia != null)
                 {
-                    var leading = token.LeadingTrivia.ToString().Replace("[", "[[");
+                    var leading = token.LeadingTrivia.ToString().EscapeMarkup();
                     if (leading == "\r\n")
                     {
                         _result.Add(_line.ToString());
@@ -57,21 +57,21 @@ namespace Example
 
                 if (token.IsKeyword())
                 {
-                    _line.Append("[blue]" + token.ToString().Replace("[", "[[") + "[/]");
+                    _line.Append("[blue]" + token.ToString().EscapeMarkup() + "[/]");
                 }
                 else
                 {
                     if (token.Kind() == SyntaxKind.IdentifierToken)
                     {
-                        _line.Append("[white]" + token.ToString().Replace("[", "[[") + "[/]");
+                        _line.Append("[white]" + token.ToString().EscapeMarkup() + "[/]");
                     }
                     else if (token.Kind() == SyntaxKind.StringLiteralToken)
                     {
-                        _line.Append("[grey]" + token.ToString().Replace("[", "[[") + "[/]");
+                        _line.Append("[grey]" + token.ToString().EscapeMarkup() + "[/]");
                     }
                     else
                     {
-                        _line.Append(token.ToString().Replace("[", "[["));
+                        _line.Append(token.ToString().EscapeMarkup());
                     }
                 }
 

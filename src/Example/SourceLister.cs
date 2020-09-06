@@ -29,7 +29,7 @@ namespace Example
             {
                 var lines = Colorizer.Colorize(reader.ReadToEnd());
 
-                var table = new Table { ShowHeaders = false, Border = BorderKind.Rounded };
+                var table = new Table { ShowHeaders = false, BorderKind = BorderKind.Rounded };
                 table.AddColumn(new TableColumn("") { NoWrap = true });
                 table.AddColumn("");
 
