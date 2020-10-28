@@ -12,14 +12,9 @@ A dotnet tool to list and run examples similar to Rust's `cargo run --example`.
 
 ```
 > dotnet example
-
-╭─────────┬───────────────────────────────┬────────────────────────────────────────╮
-│ Name    │ Path                          │ Description                            │
-├─────────┼───────────────────────────────┼────────────────────────────────────────┤
-│ Hello   │ examples/First/First.csproj   │ Writes 'Hello World' to the console.   │
-│ Goodbye │ examples/Second/Second.csproj │ Writes 'Goodbye World' to the console. │
-╰─────────┴───────────────────────────────┴────────────────────────────────────────╯
 ```
+
+![Source](docs/list.png)
 
 ## Running examples
 
@@ -31,22 +26,10 @@ Hello World!
 ## Showing example source code
 
 ```
-> dotnet example table --source
-╭────┬────────────────────────────────────────────────╮
-│ 1  │ using System;                                  │
-│ 2  │                                                │
-│ 3  │ namespace First                                │
-│ 4  │ {                                              │
-│ 5  │     class Program                              │
-│ 6  │     {                                          │
-│ 7  │         static void Main(string[] args)        │
-│ 8  │         {                                      │
-│ 9  │             Console.WriteLine("Hello World!"); │
-│ 10 │         }                                      │
-│ 11 │     }                                          │
-│ 12 │ }                                              │
-╰────┴────────────────────────────────────────────────╯
+> dotnet example hello --source
 ```
+
+![Source](docs/source.png)
 
 ## Conventions
 
@@ -67,13 +50,3 @@ To change the name, description, and the order of an example, edit it's `csproj`
 ```
 
 If no name is set in the `csproj` file, the project name will be used.
-
-```
-> dotnet example
-
-╭─────────┬───────────────────────┬───────────────────────────────────────────╮
-│ Name    │ Path                  │ Description                               │
-├─────────┼───────────────────────┼───────────────────────────────────────────┤
-│ Foo     │ examples/Foo.csproj   │ This is the description of the example.   │
-╰─────────┴───────────────────────┴───────────────────────────────────────────╯
-```
