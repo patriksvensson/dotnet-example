@@ -22,6 +22,10 @@ namespace Example.Commands
             [Description("Lists all available examples")]
             public bool List { get; set; }
 
+            [CommandOption("-a|--all")]
+            [Description("Runs all available examples")]
+            public bool All { get; set; }
+
             [CommandOption("-s|--source")]
             [Description("Show example source code")]
             public bool Source { get; set; }
@@ -42,6 +46,11 @@ namespace Example.Commands
 
         public override int Execute(CommandContext context, Settings settings)
         {
+            if (settings.All)
+            {
+                return RunAll(settings, context);
+            }
+
             if (settings.List || string.IsNullOrWhiteSpace(settings.Name))
             {
                 return List();
@@ -64,10 +73,10 @@ namespace Example.Commands
                 return 0;
             }
 
-            var grid = new Table { BorderKind = BorderKind.Rounded };
-            grid.AddColumn(new TableColumn("Name") { NoWrap = true, });
-            grid.AddColumn(new TableColumn("Path") { NoWrap = true, });
-            grid.AddColumn(new TableColumn("Description"));
+            var grid = new Table { Border = TableBorder.Rounded };
+            grid.AddColumn(new TableColumn("[grey]Name[/]") { NoWrap = true, });
+            grid.AddColumn(new TableColumn("[grey]Path[/]") { NoWrap = true, });
+            grid.AddColumn(new TableColumn("[grey]Description[/]"));
 
             foreach (var example in examples.OrderBy(e => e.Order))
             {
@@ -82,7 +91,11 @@ namespace Example.Commands
             }
 
             AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[u]Available examples:[/]");
+            AnsiConsole.WriteLine();
             AnsiConsole.Render(grid);
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("Type [blue]dotnet example --help[/] for help");
 
             return 0;
         }
@@ -127,6 +140,22 @@ namespace Example.Commands
 
             // Return the example's exit code.
             return process.ExitCode;
+        }
+
+        private int RunAll(Settings settings, CommandContext context)
+        {
+            var examples = _finder.FindExamples();
+            foreach (var example in examples)
+            {
+                var exitCode = Run(example.Name, context);
+                if (exitCode != 0)
+                {
+                    AnsiConsole.MarkupLine($"Example [u]{example.Name}[/] did not return a successful exit code.");
+                    return exitCode;
+                }
+            }
+
+            return 0;
         }
     }
 }
