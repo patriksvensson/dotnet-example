@@ -28,44 +28,51 @@ namespace Example
 
         public ProjectInformation Parse(FilePath path)
         {
+            // Load the project file
             var file = _fileSystem.GetFile(path);
-            using (var stream = file.OpenRead())
+            using var stream = file.OpenRead();
+            var xml = XDocument.Load(stream);
+
+            // Got a description?
+            var description = Parse(xml, "//ExampleDescription", "//Description");
+
+            // Got a title?
+            var name = Parse(xml, "//ExampleTitle", "//Title");
+            if (string.IsNullOrWhiteSpace(name))
             {
-                var xml = XDocument.Load(stream);
-
-                var name = path.GetFilenameWithoutExtension().FullPath;
-                var description = string.Empty;
-                var order = 1000;
-
-                // Got a description?
-                var descriptionElement = xml.Root.XPathSelectElement("//Description");
-                if (descriptionElement != null)
-                {
-                    description = descriptionElement.Value;
-                }
-
-                // Got a title?
-                var titleElement = xml.Root.XPathSelectElement("//Title");
-                if (titleElement != null)
-                {
-                    name = titleElement.Value;
-                }
-
-                // Got a order?
-                var orderElement = xml.Root.XPathSelectElement("//ExampleOrder");
-                if (orderElement != null)
-                {
-                    int.TryParse(orderElement.Value, out order);
-                }
-
-                return new ProjectInformation
-                {
-                    Name = name,
-                    Path = path,
-                    Description = description,
-                    Order = order,
-                };
+                name = path.GetFilenameWithoutExtension().FullPath;
             }
+
+            // Got an order?
+            var order = 1024;
+            var orderString = Parse(xml, "//ExampleOrder");
+            if (string.IsNullOrWhiteSpace(orderString) &&
+                int.TryParse(orderString, out var orderInteger))
+            {
+                order = orderInteger;
+            }
+
+            return new ProjectInformation
+            {
+                Name = name,
+                Path = path,
+                Description = description,
+                Order = order,
+            };
+        }
+
+        private static string Parse(XDocument document, params string[] expressions)
+        {
+            foreach (var expression in expressions)
+            {
+                var element = document.Root.XPathSelectElement(expression);
+                if (element != null)
+                {
+                    return element.Value;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

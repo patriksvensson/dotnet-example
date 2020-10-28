@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Spectre.Console;
@@ -29,7 +30,7 @@ namespace Example
             {
                 var lines = Colorizer.Colorize(reader.ReadToEnd());
 
-                var table = new Table { ShowHeaders = false, BorderKind = BorderKind.Rounded };
+                var table = new Table { ShowHeaders = false, Border = TableBorder.Rounded };
                 table.AddColumn(new TableColumn("") { NoWrap = true });
                 table.AddColumn("");
 

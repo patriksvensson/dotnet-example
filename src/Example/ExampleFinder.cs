@@ -55,7 +55,7 @@ namespace Example
                 result.Add(_parser.Parse(example));
             }
 
-            return result;
+            return result.OrderBy(x => x.Order).ToList();
         }
 
         private IEnumerable<FilePath> FindProjects(string folder)

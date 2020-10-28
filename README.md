@@ -13,48 +13,39 @@ A dotnet tool to list and run examples similar to `cargo run --example`.
 ```
 > dotnet example
 
-Colors    Demonstrates how to use colors in the console.
-Grid      Demonstrates how to render grids in a console.
-Table     Demonstrates how to render items in panels.
-Table     Demonstrates how to render tables in a console.
+╭─────────┬───────────────────────────────┬────────────────────────────────────────╮
+│ Name    │ Path                          │ Description                            │
+├─────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ Hello   │ examples/First/First.csproj   │ Writes 'Hello World' to the console.   │
+│ Goodbye │ examples/Second/Second.csproj │ Writes 'Goodbye World' to the console. │
+╰─────────┴───────────────────────────────┴────────────────────────────────────────╯
 ```
 
 ## Running examples
 
 ```
-> dotnet example table
-┌──────────┬──────────┬────────┐
-│ Foo      │ Bar      │ Baz    │
-├──────────┼──────────┼────────┤
-│ Hello    │ World!   │        │
-│ Bounjour │ le       │ monde! │
-│ Hej      │ Världen! │        │
-└──────────┴──────────┴────────┘
+> dotnet example hello
+Hello World!
 ```
 
 ## Showing example source code
 
 ```
 > dotnet example table --source
-╭────┬────────────────────────────────────────────────────────────╮
-│ 1  │ using Spectre.Console;                                     │
-│ 2  │                                                            │
-│ 3  │ namespace TableExample                                     │
-│ 4  │ {                                                          │
-│ 5  │     class Program                                          │
-│ 6  │     {                                                      │
-│ 7  │         static void Main(string[] args)                    │
-│ 8  │         {                                                  │
-│ 9  │             var table = new Table();                       │
-│ 10 │             table.AddColumn(new TableColumn("[u]Foo[/]")); │
-│ 11 │             table.AddColumn(new TableColumn("[u]Bar[/]")); │
-│ 12 │             table.AddColumn(new TableColumn("[u]Baz[/]")); │
-│ 13 │             table.AddRow("Hello", "[red]World![/]", "");   │
-│ 14 │             AnsiConsole.Render(table);                     │
-│ 15 │         }                                                  │
-│ 16 │     }                                                      │
-│ 17 │ }                                                          │
-╰────┴────────────────────────────────────────────────────────────╯
+╭────┬────────────────────────────────────────────────╮
+│ 1  │ using System;                                  │
+│ 2  │                                                │
+│ 3  │ namespace First                                │
+│ 4  │ {                                              │
+│ 5  │     class Program                              │
+│ 6  │     {                                          │
+│ 7  │         static void Main(string[] args)        │
+│ 8  │         {                                      │
+│ 9  │             Console.WriteLine("Hello World!"); │
+│ 10 │         }                                      │
+│ 11 │     }                                          │
+│ 12 │ }                                              │
+╰────┴────────────────────────────────────────────────╯
 ```
 
 ## Conventions
