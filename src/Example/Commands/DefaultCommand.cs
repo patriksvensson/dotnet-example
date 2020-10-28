@@ -9,6 +9,7 @@ namespace Example.Commands
 {
     public sealed class DefaultCommand : Command<DefaultCommand.Settings>
     {
+        private readonly IEnvironment _environment;
         private readonly ExampleFinder _finder;
         private readonly SourceLister _lister;
 
@@ -30,8 +31,6 @@ namespace Example.Commands
             [Description("Show example source code")]
             public bool Source { get; set; }
         }
-
-        private readonly IEnvironment _environment;
 
         public DefaultCommand()
         {

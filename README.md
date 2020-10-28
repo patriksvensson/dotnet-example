@@ -1,6 +1,6 @@
 # dotnet example
 
-A dotnet tool to list and run examples similar to `cargo run --example`.
+A dotnet tool to list and run examples similar to Rust's `cargo run --example`.
 
 ## Installing
 
@@ -56,19 +56,24 @@ and find the best match to the query.
 
 ## Example settings
 
-To change the name and description of how an example is listed, edit it's `csproj` file, and add the following section:
+To change the name, description, and the order of an example, edit it's `csproj` file, and add the following section:
 
 ```csharp
 <PropertyGroup>
-  <Title>Foo</Title>
-  <Description>This is the description of the example.</Description>
+  <ExampleTitle>Foo</ExampleTitle>
+  <ExampleDescription>This is the description of the example.</ExampleDescription>
+  <ExampleOrder>5</ExampleOrder>
 </PropertyGroup>
 ```
 
-If no name is set in the csproj file, the project name will be used.
+If no name is set in the `csproj` file, the project name will be used.
 
 ```
 > dotnet example
 
-Foo    This is the description of the example.
+╭─────────┬───────────────────────┬───────────────────────────────────────────╮
+│ Name    │ Path                  │ Description                               │
+├─────────┼───────────────────────┼───────────────────────────────────────────┤
+│ Foo     │ examples/Foo.csproj   │ This is the description of the example.   │
+╰─────────┴───────────────────────┴───────────────────────────────────────────╯
 ```
