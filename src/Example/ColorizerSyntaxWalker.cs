@@ -42,7 +42,7 @@ namespace Example
             {
                 if (token.LeadingTrivia != null)
                 {
-                    _result.Append(token.LeadingTrivia.ToString().EscapeMarkup());
+                    ProcessTrivia(token.LeadingTrivia);
                 }
 
                 if (token.IsKeyword())
@@ -61,16 +61,43 @@ namespace Example
                     }
                     else
                     {
-                        _result.Append(token.ToString().EscapeMarkup());
+                        _result.Append("[silver]" + token.ToString().EscapeMarkup() + "[/]");
                     }
                 }
 
                 if (token.TrailingTrivia != null)
                 {
-                     _result.Append(token.TrailingTrivia.ToString());
+                    ProcessTrivia(token.TrailingTrivia);
                 }
 
                 base.VisitToken(token);
+            }
+
+            private void ProcessTrivia(SyntaxTriviaList list)
+            {
+                foreach (var trivia in list)
+                {
+                    if (trivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
+                    {
+                        _result.Append("[green]" + trivia.ToString().EscapeMarkup() + "[/]");
+                    }
+                    else if (trivia.IsKind(SyntaxKind.MultiLineCommentTrivia))
+                    {
+                        var result = trivia.ToString().Split("\r\n", StringSplitOptions.None);
+                        foreach (var (_, _, last, item) in result.Enumerate())
+                        {
+                            _result.Append("[green]" + item.EscapeMarkup() + "[/]");
+                            if (!last)
+                            {
+                                _result.Append("\r\n");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _result.Append(trivia.ToString().EscapeMarkup());
+                    }
+                }
             }
         }
     }
