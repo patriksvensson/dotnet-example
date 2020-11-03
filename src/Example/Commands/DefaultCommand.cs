@@ -144,8 +144,15 @@ namespace Example.Commands
         private int RunAll(Settings settings, CommandContext context)
         {
             var examples = _finder.FindExamples();
-            foreach (var example in examples)
+            foreach (var (_, first, _, example) in examples.Enumerate())
             {
+                if (!first)
+                {
+                    AnsiConsole.WriteLine();
+                }
+
+                AnsiConsole.Render(new Rule($"Example: [silver]{example.Name}[/]").LeftAligned().RuleStyle("grey"));
+
                 var exitCode = Run(example.Name, context);
                 if (exitCode != 0)
                 {
