@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>Example</AssemblyName>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <PackAsTool>true</PackAsTool>
     <PackageId>dotnet-example</PackageId>

@@ -40,10 +40,7 @@ namespace Example
 
             protected override void VisitToken(SyntaxToken token)
             {
-                if (token.LeadingTrivia != null)
-                {
-                    ProcessTrivia(token.LeadingTrivia);
-                }
+                ProcessTrivia(token.LeadingTrivia);
 
                 if (token.IsKeyword())
                 {
@@ -65,10 +62,7 @@ namespace Example
                     }
                 }
 
-                if (token.TrailingTrivia != null)
-                {
-                    ProcessTrivia(token.TrailingTrivia);
-                }
+                ProcessTrivia(token.TrailingTrivia);
 
                 base.VisitToken(token);
             }
