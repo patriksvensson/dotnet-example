@@ -51,7 +51,7 @@ namespace Example
         private FilePath FindProgram(ProjectInformation project)
         {
             var directory = project.Path.GetDirectory();
-            var result = _globber.Match("**/Program.cs", new GlobberSettings { Root = directory }).OfType<FilePath>().ToList();
+            var result = _globber.Match("**/Program.(c|f)s", new GlobberSettings { Root = directory }).OfType<FilePath>().ToList();
 
             if (result.Count == 0)
             {

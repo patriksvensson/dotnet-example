@@ -62,7 +62,7 @@ namespace Example
         {
             var root = new DirectoryPath(folder).MakeAbsolute(_environment);
             var globberSettings = new GlobberSettings { Comparer = new PathComparer(false), Root = root };
-            return _globber.Match($"**/*.csproj", globberSettings).OfType<FilePath>();
+            return _globber.Match($"**/*.(c|f)sproj", globberSettings).OfType<FilePath>();
         }
     }
 }
