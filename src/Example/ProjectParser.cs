@@ -46,8 +46,7 @@ namespace Example
             // Got an order?
             var order = 1024;
             var orderString = Parse(xml, "//ExampleOrder");
-            if (string.IsNullOrWhiteSpace(orderString) &&
-                int.TryParse(orderString, out var orderInteger))
+            if (int.TryParse(orderString, out var orderInteger))
             {
                 order = orderInteger;
             }
