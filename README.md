@@ -33,7 +33,7 @@ Hello World!
 
 ## Conventions
 
-The convention is simple, if there is an `examples` or `samples` folder 
+The convention is simple, if there is an `examples`, `samples` or `eg` folder
 in the directory the tool is executed in, it will fetch all csproj files 
 and find the best match to the query.
 

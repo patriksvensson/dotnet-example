@@ -49,8 +49,9 @@ namespace Example
         {
             var result = new List<ProjectInformation>();
 
-            var examples = FindProjects("examples").Concat(FindProjects("samples"));
-            foreach (var example in examples)
+            var examples = new[] { "examples", "samples", "eg" };
+            foreach (var example in examples.Select(FindProjects)
+                                            .Aggregate((a, x) => a.Concat(x)))
             {
                 result.Add(_parser.Parse(example));
             }
