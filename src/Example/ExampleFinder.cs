@@ -2,18 +2,21 @@ using Spectre.Console;
 using Spectre.IO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Example
 {
     public sealed class ExampleFinder
     {
+        private readonly IFileSystem _fileSystem;
         private readonly IEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ProjectParser _parser;
 
         public ExampleFinder(IFileSystem fileSystem, IEnvironment environment, IGlobber globber)
         {
+            _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
             _parser = new ProjectParser(fileSystem);
@@ -47,9 +50,22 @@ namespace Example
 
         public IReadOnlyList<ProjectInformation> FindExamples()
         {
+            var dotExamplesFilePath = new FilePath(".examples").MakeAbsolute(_environment);
+            var folders = _fileSystem.Exist(dotExamplesFilePath)
+                        ? _fileSystem.GetFile(dotExamplesFilePath)
+                                     .ReadLines()
+                                     .Where(s => !string.IsNullOrWhiteSpace(s)
+                                              && !s.StartsWith('#')) // skip comments
+                                     .Select(s => s.Trim())
+                                     .ToArray()
+                        : Array.Empty<string>();
+
+            if (folders.Length == 0)
+                folders = new[] { "examples", "samples" };
+
             var result = new List<ProjectInformation>();
 
-            var examples = FindProjects("examples").Concat(FindProjects("samples"));
+            var examples = folders.Select(FindProjects).Aggregate((acc, xs) => acc.Concat(xs));
             foreach (var example in examples)
             {
                 result.Add(_parser.Parse(example));
