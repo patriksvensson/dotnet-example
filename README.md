@@ -37,6 +37,10 @@ The convention is simple, if there is an `examples` or `samples` folder
 in the directory the tool is executed in, it will fetch all csproj files 
 and find the best match to the query.
 
+If examples are located in unconventional folders, add a `.examples` file
+with the (relative) paths of the examples folders, one per line. Blank lines
+or lines starting with `#` in the `.examples` file are ignored.
+
 ## Example settings
 
 To change the name, description, and the order of an example, edit it's `csproj` file, and add the following section:
