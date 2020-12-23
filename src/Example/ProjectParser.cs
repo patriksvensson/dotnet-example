@@ -1,22 +1,10 @@
 using Spectre.IO;
+using System;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
 namespace Example
 {
-    public sealed class ProjectInformation
-    {
-        public string Name { get; set; }
-        public FilePath Path { get; set; }
-        public string Description { get; set; }
-        public int Order { get; set; }
-
-        public DirectoryPath GetWorkingDirectory()
-        {
-            return Path.GetDirectory();
-        }
-    }
-
     public sealed class ProjectParser
     {
         private readonly IFileSystem _fileSystem;
@@ -33,8 +21,19 @@ namespace Example
             using var stream = file.OpenRead();
             var xml = XDocument.Load(stream);
 
+            // Visible?
+            var visible = true;
+            var visibleString = Parse(xml, "//ExampleVisible");
+            if (visibleString?.Equals("false", StringComparison.OrdinalIgnoreCase) ?? false)
+            {
+                visible = false;
+            }
+
             // Got a description?
             var description = Parse(xml, "//ExampleDescription", "//Description");
+
+            // Belongs to a group?
+            var group = Parse(xml, "//ExampleGroup");
 
             // Got a title?
             var name = Parse(xml, "//ExampleTitle", "//Title");
@@ -57,6 +56,8 @@ namespace Example
                 Path = path,
                 Description = description,
                 Order = order,
+                Group = group,
+                Visible = visible,
             };
         }
 

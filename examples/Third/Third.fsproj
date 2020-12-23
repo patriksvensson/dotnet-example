@@ -5,6 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Title>F# as well</Title>
     <Description>Writes 'Hello world F#' to the console.</Description>
+    <ExampleGroup>F#</ExampleGroup>
   </PropertyGroup>
 
   <ItemGroup>

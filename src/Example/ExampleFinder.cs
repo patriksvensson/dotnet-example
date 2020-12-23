@@ -50,6 +50,23 @@ namespace Example
 
         public IReadOnlyList<ProjectInformation> FindExamples()
         {
+            var result = new List<ProjectInformation>();
+
+            var folders = GetExampleFolders();
+            var examples = folders.Select(FindProjects).Aggregate((acc, xs) => acc.Concat(xs));
+            foreach (var example in examples)
+            {
+                result.Add(_parser.Parse(example));
+            }
+
+            return result
+                .Where(x => x.Visible)
+                .OrderBy(x => x.Order)
+                .ToList();
+        }
+
+        private string[] GetExampleFolders()
+        {
             var dotExamplesFilePath = new FilePath(".examples").MakeAbsolute(_environment);
             var folders = _fileSystem.Exist(dotExamplesFilePath)
                         ? _fileSystem.GetFile(dotExamplesFilePath)
@@ -61,17 +78,11 @@ namespace Example
                         : Array.Empty<string>();
 
             if (folders.Length == 0)
-                folders = new[] { "examples", "samples" };
-
-            var result = new List<ProjectInformation>();
-
-            var examples = folders.Select(FindProjects).Aggregate((acc, xs) => acc.Concat(xs));
-            foreach (var example in examples)
             {
-                result.Add(_parser.Parse(example));
+                folders = new[] { "examples", "samples" };
             }
 
-            return result.OrderBy(x => x.Order).ToList();
+            return folders;
         }
 
         private IEnumerable<FilePath> FindProjects(string folder)

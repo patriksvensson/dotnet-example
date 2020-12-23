@@ -1,6 +1,8 @@
 using Spectre.Cli;
 using Spectre.Console;
+using Spectre.Console.Rendering;
 using Spectre.IO;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -52,7 +54,7 @@ namespace Example.Commands
 
             if (settings.List || string.IsNullOrWhiteSpace(settings.Name))
             {
-                return List();
+                return List(settings);
             }
 
             if (settings.Source)
@@ -63,7 +65,7 @@ namespace Example.Commands
             return Run(settings.Name, context);
         }
 
-        private int List()
+        private int List(Settings settings)
         {
             var examples = _finder.FindExamples();
             if (examples.Count == 0)
@@ -72,31 +74,46 @@ namespace Example.Commands
                 return 0;
             }
 
-            var grid = new Table { Border = TableBorder.Rounded };
-            grid.AddColumn(new TableColumn("[grey]Name[/]") { NoWrap = true, });
-            grid.AddColumn(new TableColumn("[grey]Path[/]") { NoWrap = true, });
+            AnsiConsole.WriteLine();
+
+            var rows = new Grid().Collapse();
+            rows.AddColumn();
+            foreach (var group in examples.GroupBy(ex => ex.Group))
+            {
+                rows.AddRow(CreateTable(settings, group.Key, group));
+                rows.AddEmptyRow();
+            }
+
+            AnsiConsole.Render(rows);
+
+            AnsiConsole.MarkupLine("Type [blue]dotnet example --help[/] for help");
+
+            return 0;
+        }
+
+        private Table CreateTable(Settings settings, string group, IEnumerable<ProjectInformation> projects)
+        {
+            var grid = new Table { Border = TableBorder.Rounded }.Expand();
+            grid.AddColumn(new TableColumn("[grey]Example[/]") { NoWrap = true, });
             grid.AddColumn(new TableColumn("[grey]Description[/]"));
 
-            foreach (var example in examples.OrderBy(e => e.Order))
+            if (!string.IsNullOrWhiteSpace(group))
+            {
+                grid.Title = new TableTitle(group);
+            }
+
+            foreach (var example in projects.OrderBy(e => e.Order))
             {
                 var path = _environment.WorkingDirectory.GetRelativePath(example.Path);
 
                 grid.AddRow(
                     $"[underline blue]{example.Name}[/]",
-                    $"[grey]{path.FullPath}[/]",
                     !string.IsNullOrEmpty(example.Description)
                         ? $"{example.Description}"
                         : "[grey]N/A[/]");
             }
 
-            AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine("[u]Available examples:[/]");
-            AnsiConsole.WriteLine();
-            AnsiConsole.Render(grid);
-            AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine("Type [blue]dotnet example --help[/] for help");
-
-            return 0;
+            return grid;
         }
 
         private int ViewSource(string name)
