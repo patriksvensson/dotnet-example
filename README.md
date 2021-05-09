@@ -13,12 +13,12 @@ A dotnet tool to list and run examples similar to Rust's `cargo run --example`.
 ```
 > dotnet example
 
-╭─────────────┬────────────────────────────────────────────────────╮
-│ Example     │ Description                                        │
-├─────────────┼────────────────────────────────────────────────────┤
-│ CSharp      │ Writes 'Hello world from C#' to the console        │
-│ FSharp      │ Writes 'Hello world from F#' to the console        │
-╰─────────────┴────────────────────────────────────────────────────╯
+╭─────────────┬───────────────────────────────────────────────╮
+│ Example     │ Description                                   │
+├─────────────┼───────────────────────────────────────────────┤
+│ CSharp      │ Writes 'Hello world C#' to the console        │
+│ FSharp      │ Writes 'Hello world F#' to the console        │
+╰─────────────┴───────────────────────────────────────────────╯
 
 Type dotnet example --help for help
 ```

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Title>Hello</Title>
-    <Description>Writes 'Hello World' to the console.</Description>
+    <ExampleTitle>CSharp</ExampleTitle>
+    <ExampleDescription>Writes 'Hello from C#!' to the console.</ExampleDescription>
   </PropertyGroup>
 
 </Project>

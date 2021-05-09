@@ -78,5 +78,4 @@ jobs:
         run: |
           dotnet tool restore
           dotnet cake --target="publish" \
-            --nuget-key="${{secrets.NUGET_API_KEY}}" \
-            --github-key="${{secrets.GITHUB_TOKEN}}"
+            --nuget-key="${{secrets.NUGET_API_KEY}}"

@@ -9,5 +9,5 @@ let from whom =
 [<EntryPoint>]
 let main argv =
     let message = from "F#" // Call the function
-    printfn "Hello world %s" message
+    printfn "Hello %s" message
     0 // return an integer exit code

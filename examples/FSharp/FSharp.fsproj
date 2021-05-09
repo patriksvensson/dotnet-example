@@ -3,9 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <Title>F# as well</Title>
-    <Description>Writes 'Hello world F#' to the console.</Description>
-    <ExampleGroup>F#</ExampleGroup>
+    <ExampleTitle>FSharp</ExampleTitle>
+    <ExampleDescription>Writes 'Hello from F#!' to the console.</ExampleDescription>
   </PropertyGroup>
 
   <ItemGroup>
