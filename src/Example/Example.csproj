@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>Example</AssemblyName>
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <PackAsTool>true</PackAsTool>
     <PackageId>dotnet-example</PackageId>
     <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
@@ -37,9 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CliWrap" Version="3.3.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="MinVer" PrivateAssets="All" Version="2.3.1" />
-    <PackageReference Include="Spectre.Cli" Version="0.46.0" />
+    <PackageReference Include="Spectre.Console" Version="0.39.1-preview.0.1" />
     <PackageReference Include="Spectre.IO" Version="0.1.0" />
   </ItemGroup>
 

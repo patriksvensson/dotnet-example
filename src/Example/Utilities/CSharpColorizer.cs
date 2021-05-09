@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace Example
 {
-    public sealed class Colorizer
+    public sealed class CSharpColorizer
     {
         public static List<string> Colorize(string source)
         {
