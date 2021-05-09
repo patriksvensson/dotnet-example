@@ -13,24 +13,35 @@ A dotnet tool to list and run examples similar to Rust's `cargo run --example`.
 ```
 > dotnet example
 
-╭─────────────┬───────────────────────────────────────────────╮
-│ Example     │ Description                                   │
-├─────────────┼───────────────────────────────────────────────┤
-│ CSharp      │ Writes 'Hello world C#' to the console        │
-│ FSharp      │ Writes 'Hello world F#' to the console        │
-╰─────────────┴───────────────────────────────────────────────╯
+╭─────────────┬──────────────────────────────────────────────╮
+│ Example     │ Description                                  │
+├─────────────┼──────────────────────────────────────────────┤
+│ CSharp      │ Writes 'Hello from C#' to the console        │
+│ FSharp      │ Writes 'Hello from F#' to the console        │
+╰─────────────┴──────────────────────────────────────────────╯
 
 Type dotnet example --help for help
 ```
 
-## Running examples
+## Running individual examples
 
 ```
 > dotnet example csharp
-Hello world from C#
+Hello from C#
 
 > dotnet example fsharp
-Hello world from F#
+Hello from F#
+```
+
+## Running all examples
+
+```
+> dotnet example --all
+── Example: CSharp ────────────────────────────────────────────────
+Hello from C#
+
+── Example: FSharp ────────────────────────────────────────────────
+Hello from F#
 ```
 
 ## Showing example source code
@@ -50,7 +61,7 @@ Hello world from F#
 │ 9  │ [<EntryPoint>]                                                    │
 │ 10 │ let main argv =                                                   │
 │ 11 │     let message = from "F#" // Call the function                  │
-│ 12 │     printfn "Hello world %s" message                              │
+│ 12 │     printfn "Hello %s" message                                    │
 │ 13 │     0 // return an integer exit code                              │
 ╰────┴───────────────────────────────────────────────────────────────────╯
 ```
