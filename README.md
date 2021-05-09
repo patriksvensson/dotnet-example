@@ -12,29 +12,53 @@ A dotnet tool to list and run examples similar to Rust's `cargo run --example`.
 
 ```
 > dotnet example
-```
 
-![Source](docs/list.png)
+╭─────────────┬────────────────────────────────────────────────────╮
+│ Example     │ Description                                        │
+├─────────────┼────────────────────────────────────────────────────┤
+│ CSharp      │ Writes 'Hello world from C#' to the console        │
+│ FSharp      │ Writes 'Hello world from F#' to the console        │
+╰─────────────┴────────────────────────────────────────────────────╯
+
+Type dotnet example --help for help
+```
 
 ## Running examples
 
 ```
-> dotnet example hello
-Hello World!
+> dotnet example csharp
+Hello world from C#
+
+> dotnet example fsharp
+Hello world from F#
 ```
 
 ## Showing example source code
 
 ```
-> dotnet example hello --source
-```
+> dotnet example fsharp --source
 
-![Source](docs/source.png)
+╭────┬───────────────────────────────────────────────────────────────────╮
+│ 1  │ // Learn more about F# at http://docs.microsoft.com/dotnet/fsharp │
+│ 2  │                                                                   │
+│ 3  │ open System                                                       │
+│ 4  │                                                                   │
+│ 5  │ // Define a function to construct a message to print              │
+│ 6  │ let from whom =                                                   │
+│ 7  │     sprintf "from %s" whom                                        │
+│ 8  │                                                                   │
+│ 9  │ [<EntryPoint>]                                                    │
+│ 10 │ let main argv =                                                   │
+│ 11 │     let message = from "F#" // Call the function                  │
+│ 12 │     printfn "Hello world %s" message                              │
+│ 13 │     0 // return an integer exit code                              │
+╰────┴───────────────────────────────────────────────────────────────────╯
+```
 
 ## Conventions
 
 The convention is simple, if there is an `examples` or `samples` folder 
-in the directory the tool is executed in, it will fetch all csproj files 
+in the directory the tool is executed in, it will fetch all `csproj`/`fsproj` files 
 and find the best match to the query.
 
 If examples are located in unconventional folders, add a `.examples` file
@@ -43,9 +67,9 @@ or lines starting with `#` in the `.examples` file are ignored.
 
 ## Example settings
 
-To change the name, description, and the order of an example, edit it's `csproj` file, and add the following section:
+To change the name, description, and the order of an example, edit its `csproj`/`fsproj` file, and add the following section:
 
-```csharp
+```xml
 <PropertyGroup>
   <ExampleTitle>Foo</ExampleTitle>
   <ExampleDescription>This is the description of the example.</ExampleDescription>
@@ -54,3 +78,10 @@ To change the name, description, and the order of an example, edit it's `csproj`
 ```
 
 If no name is set in the `csproj` file, the project name will be used.
+To ignore an example, add the `ExampleVisible` property in the example's `csproj`/`fsproj` file.
+
+```xml
+<PropertyGroup>
+  <ExampleVisible>false</ExampleTitle>
+</PropertyGroup>
+```
