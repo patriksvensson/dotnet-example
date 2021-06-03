@@ -45,6 +45,10 @@ namespace Example
             [CommandOption("-s|--source")]
             [Description("Show example source code")]
             public bool Source { get; set; }
+
+            [CommandOption("--select")]
+            [Description("Show example source code")]
+            public bool Select { get; set; }
         }
 
         public DefaultCommand(IAnsiConsole console)
@@ -62,6 +66,33 @@ namespace Example
                 var finder = new ExampleFinder(_fileSystem, _environment, _globber);
                 var runner = new ExampleRunner(_console, finder);
                 return await runner.RunAll(context.Remaining);
+            }
+            else if (settings.Select)
+            {
+                var finder = new ExampleFinder(_fileSystem, _environment, _globber);
+                var selector = new ExampleSelector(_console, finder);
+
+                var example = selector.Select();
+                if (example == null)
+                {
+                    return -1;
+                }
+
+                if (settings.Source)
+                {
+                    var sourceLister = new ExampleSourceLister(_fileSystem, _globber);
+                    if (!sourceLister.List(example))
+                    {
+                        return -1;
+                    }
+
+                    return 0;
+                }
+                else
+                {
+                    var runner = new ExampleRunner(_console, finder);
+                    return await runner.Run(example.Name, context.Remaining);
+                }
             }
             else if (settings.List || string.IsNullOrWhiteSpace(settings.Name))
             {

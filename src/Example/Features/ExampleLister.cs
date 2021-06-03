@@ -39,7 +39,6 @@ namespace Example
             _console.MarkupLine("Type [blue]dotnet example --help[/] for help");
         }
 
-
         private static Table CreateTable(string group, IEnumerable<ProjectInformation> projects)
         {
             var grid = new Table { Border = TableBorder.Rounded }.Expand();
