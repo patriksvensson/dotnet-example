@@ -1,13 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
-using CliWrap.EventStream;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -37,22 +30,25 @@ namespace Example
                 return -1;
             }
 
-            var arguments = "run";
-            if (remaining.Raw.Count > 0)
-            {
-                arguments += $"--no-build --no-restore -- {string.Join(" ", remaining.Raw)}";
-            }
+            var result = await Cli.Wrap("dotnet")
+                .WithWorkingDirectory(example.GetWorkingDirectory().FullPath)
+                .WithValidation(CommandResultValidation.None)
+                .WithArguments(args =>
+                {
+                    args.Add("run");
 
-            // Run the example using "dotnet run"
-            var info = new ProcessStartInfo("dotnet")
-            {
-                Arguments = arguments,
-                WorkingDirectory = example.GetWorkingDirectory().FullPath
-            };
+                    if (remaining.Raw.Count > 0)
+                    {
+                        args
+                            .Add("--no-build")
+                            .Add("--no-restore")
+                            .Add("--")
+                            .Add(remaining.Raw);
+                    }
+                })
+                .ExecuteAsync();
 
-            var process = Process.Start(info);
-            process.WaitForExit();
-            return process.ExitCode;
+            return result.ExitCode;
         }
 
         public async Task<int> RunAll(IRemainingArguments remaining)
@@ -82,24 +78,16 @@ namespace Example
         {
             var exitCode = await _console.Status().StartAsync($"Building example [yellow]{example.Name}[/]...", async ctx =>
             {
-                var cmd = Cli.Wrap("dotnet").WithArguments("build")
+                var result = await Cli.Wrap("dotnet")
+                    .WithArguments("build")
                     .WithWorkingDirectory(example.GetWorkingDirectory().FullPath)
-                    .WithValidation(CommandResultValidation.None);
+                    .WithValidation(CommandResultValidation.None)
+                    .WithStandardErrorPipe(PipeTarget.ToDelegate(
+                        line => _console.MarkupLine($"[red]{line.EscapeMarkup()}[/]")
+                    ))
+                    .ExecuteAsync();
 
-                await foreach (var cmdEvent in cmd.ListenAsync())
-                {
-                    switch (cmdEvent)
-                    {
-                        case StandardErrorCommandEvent stdErr:
-                            _console.MarkupLine($"[red]{stdErr.Text.EscapeMarkup()}[/]");
-                            break;
-                        case ExitedCommandEvent exited:
-                            return exited.ExitCode;
-                    }
-                }
-
-                // Should never occur
-                return -1;
+                return result.ExitCode;
             });
 
             return exitCode == 0;
