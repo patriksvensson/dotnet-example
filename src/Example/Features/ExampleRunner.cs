@@ -46,6 +46,8 @@ namespace Example
                             .Add(remaining.Raw);
                     }
                 })
+                .WithStandardOutputPipe(PipeTarget.ToDelegate(_console.WriteLine))
+                .WithStandardErrorPipe(PipeTarget.ToDelegate(_console.WriteLine))
                 .ExecuteAsync();
 
             return result.ExitCode;
