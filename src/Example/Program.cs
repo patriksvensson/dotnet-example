@@ -42,6 +42,10 @@ namespace Example
             [Description("Runs all available examples")]
             public bool All { get; set; }
 
+            [CommandOption("--skip")]
+            [Description("Skips example when combined with [grey]--all[/]")]
+            public string[] Skip { get; set; }
+
             [CommandOption("-s|--source")]
             [Description("Show example source code")]
             public bool Source { get; set; }
@@ -63,13 +67,13 @@ namespace Example
         {
             if (settings.All)
             {
-                var finder = new ExampleFinder(_fileSystem, _environment, _globber);
+                var finder = new ExampleFinder(_fileSystem, _environment, _globber, settings.Skip);
                 var runner = new ExampleRunner(_console, finder);
                 return await runner.RunAll(context.Remaining);
             }
             else if (settings.Select)
             {
-                var finder = new ExampleFinder(_fileSystem, _environment, _globber);
+                var finder = new ExampleFinder(_fileSystem, _environment, _globber, settings.Skip);
                 var selector = new ExampleSelector(_console, finder);
 
                 var example = selector.Select();
@@ -96,14 +100,14 @@ namespace Example
             }
             else if (settings.List || string.IsNullOrWhiteSpace(settings.Name))
             {
-                var finder = new ExampleFinder(_fileSystem, _environment, _globber);
+                var finder = new ExampleFinder(_fileSystem, _environment, _globber, settings.Skip);
                 var lister = new ExampleLister(_console, finder);
                 lister.List();
                 return 0;
             }
             else if (settings.Source)
             {
-                var finder = new ExampleFinder(_fileSystem, _environment, _globber);
+                var finder = new ExampleFinder(_fileSystem, _environment, _globber, settings.Skip);
                 var example = finder.FindExample(settings.Name);
                 if (example == null)
                 {
@@ -120,7 +124,7 @@ namespace Example
             }
             else
             {
-                var finder = new ExampleFinder(_fileSystem, _environment, _globber);
+                var finder = new ExampleFinder(_fileSystem, _environment, _globber, settings.Skip);
                 var runner = new ExampleRunner(_console, finder);
                 return await runner.Run(settings.Name, context.Remaining);
             }

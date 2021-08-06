@@ -12,13 +12,15 @@ namespace Example
         private readonly IFileSystem _fileSystem;
         private readonly IEnvironment _environment;
         private readonly IGlobber _globber;
+        private readonly string[] _skip;
         private readonly ProjectParser _parser;
 
-        public ExampleFinder(IFileSystem fileSystem, IEnvironment environment, IGlobber globber)
+        public ExampleFinder(IFileSystem fileSystem, IEnvironment environment, IGlobber globber, string[] skip)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
+            _skip = skip ?? Array.Empty<string>();
             _parser = new ProjectParser(fileSystem);
         }
 
@@ -60,7 +62,7 @@ namespace Example
             }
 
             return result
-                .Where(x => x.Visible)
+                .Where(x => x.Visible && !_skip.Contains(x.Name, StringComparer.OrdinalIgnoreCase))
                 .OrderBy(x => x.Order)
                 .ToList();
         }

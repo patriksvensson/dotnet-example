@@ -91,7 +91,7 @@ namespace Example
                     switch (cmdEvent)
                     {
                         case StandardErrorCommandEvent stdErr:
-                            _console.MarkupLine($"[red]{stdErr.Text.EscapeMarkup()}[/]");
+                            _console.MarkupLine($"[red]ERR>[/] {stdErr.Text.EscapeMarkup()}");
                             break;
                         case ExitedCommandEvent exited:
                             return exited.ExitCode;
@@ -101,6 +101,11 @@ namespace Example
                 // Should never occur
                 return -1;
             });
+
+            if (exitCode != 0)
+            {
+                _console.MarkupLine($"[red]Error:[/] Could not build example [u]{example.Name}[/]");
+            }
 
             return exitCode == 0;
         }
