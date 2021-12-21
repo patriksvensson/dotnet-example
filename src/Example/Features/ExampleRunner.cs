@@ -1,113 +1,112 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.EventStream;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Example
+namespace Example;
+
+public class ExampleRunner
 {
-    public class ExampleRunner
+    private readonly IAnsiConsole _console;
+    private readonly ExampleFinder _finder;
+
+    public ExampleRunner(IAnsiConsole console, ExampleFinder finder)
     {
-        private readonly IAnsiConsole _console;
-        private readonly ExampleFinder _finder;
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+        _finder = finder ?? throw new ArgumentNullException(nameof(finder));
+    }
 
-        public ExampleRunner(IAnsiConsole console, ExampleFinder finder)
+    public async Task<int> Run(string name, IRemainingArguments remaining)
+    {
+        var example = _finder.FindExample(name);
+        if (example == null)
         {
-            _console = console ?? throw new ArgumentNullException(nameof(console));
-            _finder = finder ?? throw new ArgumentNullException(nameof(finder));
+            return -1;
         }
 
-        public async Task<int> Run(string name, IRemainingArguments remaining)
+        if (!await Build(example).ConfigureAwait(false))
         {
-            var example = _finder.FindExample(name);
-            if (example == null)
-            {
-                return -1;
-            }
-
-            if (!await Build(example))
-            {
-                return -1;
-            }
-
-            var arguments = "run";
-            if (remaining.Raw.Count > 0)
-            {
-                arguments += $"--no-build --no-restore -- {string.Join(" ", remaining.Raw)}";
-            }
-
-            // Run the example using "dotnet run"
-            var info = new ProcessStartInfo("dotnet")
-            {
-                Arguments = arguments,
-                WorkingDirectory = example.GetWorkingDirectory().FullPath
-            };
-
-            var process = Process.Start(info);
-            process.WaitForExit();
-            return process.ExitCode;
+            return -1;
         }
 
-        public async Task<int> RunAll(IRemainingArguments remaining)
+        var arguments = "run";
+        if (remaining.Raw.Count > 0)
         {
-            var examples = _finder.FindExamples();
-            foreach (var (_, first, _, example) in examples.Enumerate())
-            {
-                if (!first)
-                {
-                    _console.WriteLine();
-                }
-
-                _console.Write(new Rule($"Example: [silver]{example.Name}[/]").LeftAligned().RuleStyle("grey"));
-
-                var exitCode = await Run(example.Name, remaining);
-                if (exitCode != 0)
-                {
-                    _console.MarkupLine($"[red]Error:[/] Example [u]{example.Name}[/] did not return a successful exit code.");
-                    return exitCode;
-                }
-            }
-
-            return 0;
+            arguments += $"--no-build --no-restore -- {string.Join(" ", remaining.Raw)}";
         }
 
-        private async Task<bool> Build(ProjectInformation example)
+        // Run the example using "dotnet run"
+        var info = new ProcessStartInfo("dotnet")
         {
-            var exitCode = await _console.Status().StartAsync($"Building example [yellow]{example.Name}[/]...", async ctx =>
+            Arguments = arguments,
+            WorkingDirectory = example.GetWorkingDirectory().FullPath,
+        };
+
+        var process = Process.Start(info);
+        if (process == null)
+        {
+            throw new InvalidOperationException("An error occured when starting the 'dotnet' process");
+        }
+
+        process.WaitForExit();
+        return process.ExitCode;
+    }
+
+    public async Task<int> RunAll(IRemainingArguments remaining)
+    {
+        var examples = _finder.FindExamples();
+        foreach (var (_, first, _, example) in examples.Enumerate())
+        {
+            if (!first)
             {
-                var cmd = Cli.Wrap("dotnet").WithArguments("build")
-                    .WithWorkingDirectory(example.GetWorkingDirectory().FullPath)
-                    .WithValidation(CommandResultValidation.None);
+                _console.WriteLine();
+            }
 
-                await foreach (var cmdEvent in cmd.ListenAsync())
-                {
-                    switch (cmdEvent)
-                    {
-                        case StandardErrorCommandEvent stdErr:
-                            _console.MarkupLine($"[red]ERR>[/] {stdErr.Text.EscapeMarkup()}");
-                            break;
-                        case ExitedCommandEvent exited:
-                            return exited.ExitCode;
-                    }
-                }
+            _console.Write(new Rule($"Example: [silver]{example.Name}[/]").LeftAligned().RuleStyle("grey"));
 
-                // Should never occur
-                return -1;
-            });
-
+            var exitCode = await Run(example.Name, remaining).ConfigureAwait(false);
             if (exitCode != 0)
             {
-                _console.MarkupLine($"[red]Error:[/] Could not build example [u]{example.Name}[/]");
+                _console.MarkupLine($"[red]Error:[/] Example [u]{example.Name}[/] did not return a successful exit code.");
+                return exitCode;
+            }
+        }
+
+        return 0;
+    }
+
+    private async Task<bool> Build(ProjectInformation example)
+    {
+        var exitCode = await _console.Status().StartAsync($"Building example [yellow]{example.Name}[/]...", async ctx =>
+        {
+            var cmd = Cli.Wrap("dotnet").WithArguments("build")
+                .WithWorkingDirectory(example.GetWorkingDirectory().FullPath)
+                .WithValidation(CommandResultValidation.None);
+
+            await foreach (var cmdEvent in cmd.ListenAsync())
+            {
+                switch (cmdEvent)
+                {
+                    case StandardErrorCommandEvent stdErr:
+                        _console.MarkupLine($"[red]ERR>[/] {stdErr.Text.EscapeMarkup()}");
+                        break;
+                    case ExitedCommandEvent exited:
+                        return exited.ExitCode;
+                }
             }
 
-            return exitCode == 0;
+            // Should never occur
+            return -1;
+        }).ConfigureAwait(false);
+
+        if (exitCode != 0)
+        {
+            _console.MarkupLine($"[red]Error:[/] Could not build example [u]{example.Name}[/]");
         }
+
+        return exitCode == 0;
     }
 }

@@ -1,39 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Example
+namespace Example;
+
+internal static class EnumerableExtensions
 {
-    internal static class EnumerableExtensions
+    public static IEnumerable<(int Index, bool First, bool Last, T Item)> Enumerate<T>(this IEnumerable<T> source)
     {
-        public static IEnumerable<(int Index, bool First, bool Last, T Item)> Enumerate<T>(this IEnumerable<T> source)
+        if (source is null)
         {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            return Enumerate(source.GetEnumerator());
+            throw new ArgumentNullException(nameof(source));
         }
 
-        public static IEnumerable<(int Index, bool First, bool Last, T Item)> Enumerate<T>(this IEnumerator<T> source)
+        return Enumerate(source.GetEnumerator());
+    }
+
+    public static IEnumerable<(int Index, bool First, bool Last, T Item)> Enumerate<T>(this IEnumerator<T> source)
+    {
+        if (source is null)
         {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            throw new ArgumentNullException(nameof(source));
+        }
 
-            var first = true;
-            var last = !source.MoveNext();
-            T current;
+        var first = true;
+        var last = !source.MoveNext();
+        T current;
 
-            for (var index = 0; !last; index++)
-            {
-                current = source.Current;
-                last = !source.MoveNext();
-                yield return (index, first, last, current);
-                first = false;
-            }
+        for (var index = 0; !last; index++)
+        {
+            current = source.Current;
+            last = !source.MoveNext();
+            yield return (index, first, last, current);
+            first = false;
         }
     }
 }

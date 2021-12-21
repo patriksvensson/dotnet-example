@@ -1,19 +1,30 @@
 using Spectre.IO;
 
-namespace Example
-{
-    public sealed class ProjectInformation
-    {
-        public string Name { get; set; }
-        public FilePath Path { get; set; }
-        public string Description { get; set; }
-        public int Order { get; set; }
-        public bool Visible { get; set; }
-        public string Group { get; set; }
+namespace Example;
 
-        public DirectoryPath GetWorkingDirectory()
-        {
-            return Path.GetDirectory();
-        }
+public sealed class ProjectInformation
+{
+    public string Name { get; }
+    public FilePath Path { get; }
+    public string Description { get; }
+    public int Order { get; }
+    public bool Visible { get; }
+    public string Group { get; }
+
+    public ProjectInformation(
+        string name, FilePath path, string description,
+        int order, bool visible, string group)
+    {
+        Name = name;
+        Path = path;
+        Description = description;
+        Order = order;
+        Visible = visible;
+        Group = group;
+    }
+
+    public DirectoryPath GetWorkingDirectory()
+    {
+        return Path.GetDirectory();
     }
 }

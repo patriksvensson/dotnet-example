@@ -1,10 +1,9 @@
-namespace Example
+namespace Example;
+
+public static class StringExtensions
 {
-    public static class StringExtensions
+    public static string? EscapeMarkup(this string markup)
     {
-        public static string EscapeMarkup(this string markup)
-        {
-            return markup?.Replace("[", "[[")?.Replace("]", "]]");
-        }
+        return markup?.Replace("[", "[[")?.Replace("]", "]]");
     }
 }

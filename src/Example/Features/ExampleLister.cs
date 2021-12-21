@@ -3,61 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using Spectre.Console;
 
-namespace Example
+namespace Example;
+
+public sealed class ExampleLister
 {
-    public sealed class ExampleLister
+    private readonly IAnsiConsole _console;
+    private readonly ExampleFinder _finder;
+
+    public ExampleLister(IAnsiConsole console, ExampleFinder finder)
     {
-        private readonly IAnsiConsole _console;
-        private readonly ExampleFinder _finder;
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+        _finder = finder ?? throw new ArgumentNullException(nameof(finder));
+    }
 
-        public ExampleLister(IAnsiConsole console, ExampleFinder finder)
+    public void List()
+    {
+        var examples = _finder.FindExamples();
+        if (examples.Count == 0)
         {
-            _console = console ?? throw new ArgumentNullException(nameof(console));
-            _finder = finder ?? throw new ArgumentNullException(nameof(finder));
+            _console.Markup("[yellow]No examples could be found.[/]");
+            return;
         }
 
-        public void List()
+        _console.WriteLine();
+
+        var rows = new Grid().Collapse();
+        rows.AddColumn();
+        foreach (var group in examples.GroupBy(ex => ex.Group))
         {
-            var examples = _finder.FindExamples();
-            if (examples.Count == 0)
-            {
-                _console.Markup("[yellow]No examples could be found.[/]");
-                return;
-            }
-
-            _console.WriteLine();
-
-            var rows = new Grid().Collapse();
-            rows.AddColumn();
-            foreach (var group in examples.GroupBy(ex => ex.Group))
-            {
-                rows.AddRow(CreateTable(group.Key, group));
-                rows.AddEmptyRow();
-            }
-
-            _console.Write(rows);
-            _console.MarkupLine("Type [blue]dotnet example --help[/] for help");
+            rows.AddRow(CreateTable(group.Key, group));
+            rows.AddEmptyRow();
         }
 
-        private static Table CreateTable(string group, IEnumerable<ProjectInformation> projects)
+        _console.Write(rows);
+        _console.MarkupLine("Type [blue]dotnet example --help[/] for help");
+    }
+
+    private static Table CreateTable(string group, IEnumerable<ProjectInformation> projects)
+    {
+        var grid = new Table { Border = TableBorder.Rounded }.Expand();
+        grid.AddColumn(new TableColumn("[grey]Example[/]") { NoWrap = true, });
+        grid.AddColumn(new TableColumn("[grey]Description[/]"));
+
+        if (!string.IsNullOrWhiteSpace(group))
         {
-            var grid = new Table { Border = TableBorder.Rounded }.Expand();
-            grid.AddColumn(new TableColumn("[grey]Example[/]") { NoWrap = true, });
-            grid.AddColumn(new TableColumn("[grey]Description[/]"));
-
-            if (!string.IsNullOrWhiteSpace(group))
-            {
-                grid.Title = new TableTitle(group);
-            }
-
-            foreach (var example in projects.OrderBy(e => e.Order))
-            {
-                grid.AddRow(
-                    $"[underline blue]{example.Name}[/]",
-                    example.Description ?? "[grey]N/A[/]");
-            }
-
-            return grid;
+            grid.Title = new TableTitle(group);
         }
+
+        foreach (var example in projects.OrderBy(e => e.Order))
+        {
+            grid.AddRow(
+                $"[underline blue]{example.Name}[/]",
+                example.Description ?? "[grey]N/A[/]");
+        }
+
+        return grid;
     }
 }

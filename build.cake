@@ -7,10 +7,10 @@ var configuration = Argument("configuration", "Release");
 Task("Build")
     .Does(context => 
 {
-    DotNetCoreBuild("./src/Example.sln", new DotNetCoreBuildSettings {
+    DotNetBuild("./src/Example.sln", new DotNetBuildSettings {
         Configuration = configuration,
         NoIncremental = context.HasArgument("rebuild"),
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
+        MSBuildSettings = new DotNetMSBuildSettings()
             .TreatAllWarningsAs(MSBuildTreatAllWarningsAs.Error)
     });
 });
@@ -21,12 +21,12 @@ Task("Package")
 {
     context.CleanDirectory("./.artifacts");
 
-    context.DotNetCorePack($"./src/Example.sln", new DotNetCorePackSettings {
+    context.DotNetPack($"./src/Example.sln", new DotNetPackSettings {
         Configuration = configuration,
         NoRestore = true,
         NoBuild = true,
         OutputDirectory = "./.artifacts",
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
+        MSBuildSettings = new DotNetMSBuildSettings()
             .TreatAllWarningsAs(MSBuildTreatAllWarningsAs.Error)
             .WithProperty("SymbolPackageFormat", "snupkg")
     });
@@ -46,7 +46,7 @@ Task("Publish-NuGet")
     foreach(var file in context.GetFiles("./.artifacts/*.nupkg")) 
     {
         context.Information("Publishing {0}...", file.GetFilename().FullPath);
-        DotNetCoreNuGetPush(file.FullPath, new DotNetCoreNuGetPushSettings
+        DotNetNuGetPush(file.FullPath, new DotNetNuGetPushSettings
         {
             Source = "https://api.nuget.org/v3/index.json",
             ApiKey = apiKey,
