@@ -57,7 +57,7 @@ public sealed class ExampleSelector
         }
 
         var example = AnsiConsole.Prompt(prompt
-            .Title("[yellow]Choose example to run[/]")
+            .Title("[yellow]Choose an example to run[/]")
             .MoreChoicesText("[grey](Move up and down to reveal more examples)[/]")
             .Mode(SelectionMode.Leaf));
 
