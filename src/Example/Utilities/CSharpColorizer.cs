@@ -48,11 +48,11 @@ public sealed class CSharpColorizer
             }
             else
             {
-                if (token.Kind() == SyntaxKind.IdentifierToken)
+                if (token.IsKind(SyntaxKind.IdentifierToken))
                 {
                     _result.Append("[white]").Append(token.ToString().EscapeMarkup()).Append("[/]");
                 }
-                else if (token.Kind() == SyntaxKind.StringLiteralToken)
+                else if (token.IsKind(SyntaxKind.StringLiteralToken))
                 {
                     _result.Append("[grey]").Append(token.ToString().EscapeMarkup()).Append("[/]");
                 }

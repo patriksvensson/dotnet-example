@@ -65,7 +65,7 @@ public class ExampleRunner
                 _console.WriteLine();
             }
 
-            _console.Write(new Rule($"Example: [silver]{example.Name}[/]").LeftAligned().RuleStyle("grey"));
+            _console.Write(new Rule($"Example: [silver]{example.Name}[/]").LeftJustified().RuleStyle("grey"));
 
             var exitCode = await Run(example.Name, remaining).ConfigureAwait(false);
             if (exitCode != 0)

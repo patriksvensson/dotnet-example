@@ -50,7 +50,7 @@ public sealed class DefaultCommand : AsyncCommand<DefaultCommand.Settings>
         public bool Source { get; set; }
 
         [CommandOption("--select")]
-        [Description("Show example source code")]
+        [Description("Select an example from a list")]
         public bool Select { get; set; }
     }
 

@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <AssemblyName>Example</AssemblyName>
-    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net7.0;net6.0;netcoreapp3.1</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>dotnet-example</PackageId>
     <RollForward>LatestMajor</RollForward>
@@ -41,10 +41,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.3.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
-    <PackageReference Include="Spectre.Console" Version="0.43.0" />
-    <PackageReference Include="Spectre.IO" Version="0.8.0" />
+    <PackageReference Include="CliWrap" Version="3.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
+    <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.45" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.45.1-preview.0.45" />
+    <PackageReference Include="Spectre.IO" Version="0.9.0" />
   </ItemGroup>
 
 </Project>
