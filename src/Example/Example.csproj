@@ -7,7 +7,7 @@
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>dotnet-example</PackageId>
-    <RollForward>LatestMajor</RollForward>
+    <RollForward>Major</RollForward>
     <ToolCommandName>dotnet-example</ToolCommandName>
   </PropertyGroup>
 
