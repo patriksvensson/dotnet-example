@@ -9,6 +9,7 @@
     <PackageId>dotnet-example</PackageId>
     <RollForward>Major</RollForward>
     <ToolCommandName>dotnet-example</ToolCommandName>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)/../..</RunWorkingDirectory> 
   </PropertyGroup>
 
   <ItemGroup>
