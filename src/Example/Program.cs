@@ -1,9 +1,3 @@
-using System.ComponentModel;
-using System.Threading.Tasks;
-using Spectre.Console;
-using Spectre.Console.Cli;
-using Spectre.IO;
-
 namespace Example;
 
 public static class Program
@@ -62,7 +56,7 @@ public sealed class DefaultCommand : AsyncCommand<DefaultCommand.Settings>
         _globber = new Globber(_fileSystem, _environment);
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         if (settings.All)
         {

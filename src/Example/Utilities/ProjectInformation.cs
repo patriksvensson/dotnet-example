@@ -1,5 +1,3 @@
-using Spectre.IO;
-
 namespace Example;
 
 public sealed class ProjectInformation

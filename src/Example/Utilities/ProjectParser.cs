@@ -1,8 +1,3 @@
-using System;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using Spectre.IO;
-
 namespace Example;
 
 public sealed class ProjectParser

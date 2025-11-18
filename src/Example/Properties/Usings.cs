@@ -1,0 +1,13 @@
+global using System.ComponentModel;
+global using System.Diagnostics;
+global using System.Text;
+global using System.Xml.Linq;
+global using System.Xml.XPath;
+global using CliWrap;
+global using CliWrap.EventStream;
+global using Microsoft.CodeAnalysis;
+global using Microsoft.CodeAnalysis.CSharp;
+global using Spectre.Console;
+global using Spectre.Console.Cli;
+global using Spectre.IO;
+global using Environment = Spectre.IO.Environment;

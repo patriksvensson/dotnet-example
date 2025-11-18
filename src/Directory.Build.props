@@ -1,11 +1,18 @@
 <Project>
   <PropertyGroup Label="Settings">
     <Deterministic>true</Deterministic>
-    <LangVersion>12</LangVersion>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>true</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);SA1633</NoWarn>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
 
   <PropertyGroup Label="Deterministic Build" Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -18,11 +25,8 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="MinVer" PrivateAssets="All" Version="6.0.0" />
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="MinVer" PrivateAssets="All" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
     <PackageReference Include="Roslynator.Analyzers" Version="4.12.9">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

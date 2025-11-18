@@ -1,11 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using CliWrap;
-using CliWrap.EventStream;
-using Spectre.Console;
-using Spectre.Console.Cli;
-
 namespace Example;
 
 public class ExampleRunner

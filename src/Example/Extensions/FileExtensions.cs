@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using Spectre.IO;
-
 namespace Example;
 
 public static class FileExtensions

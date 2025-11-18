@@ -4,24 +4,14 @@
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <AssemblyName>Example</AssemblyName>
-    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <PackageId>dotnet-example</PackageId>
     <RollForward>Major</RollForward>
     <ToolCommandName>dotnet-example</ToolCommandName>
-    <RunWorkingDirectory>$(MSBuildProjectDirectory)/../..</RunWorkingDirectory> 
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)/../..</RunWorkingDirectory>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\stylecop.json" Link="Properties/stylecop.json" />
-  </ItemGroup>
-
-  <Target Name="Versioning" BeforeTargets="MinVer">
-    <PropertyGroup Label="Build">
-      <MinVerDefaultPreReleasePhase>preview</MinVerDefaultPreReleasePhase>
-      <MinVerVerbosity>normal</MinVerVerbosity>
-    </PropertyGroup>
-  </Target>
 
   <PropertyGroup Label="Package Information">
     <Description>A dotnet tool to run examples.</Description>
@@ -42,10 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.6.7" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
-    <PackageReference Include="Spectre.IO" Version="0.18.0" />
+    <PackageReference Include="CliWrap" Version="3.9.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.53.0" />
+    <PackageReference Include="Spectre.IO" Version="0.21.0" />
   </ItemGroup>
 
 </Project>

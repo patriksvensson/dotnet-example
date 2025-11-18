@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Build/">
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Build/GitHub/">
+    <File Path="..\.github\workflows\ci.yaml" />
+    <File Path="..\.github\workflows\publish.yaml" />
+  </Folder>
+  <Project Path="Example/Example.csproj" />
+</Solution>
