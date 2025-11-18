@@ -37,5 +37,4 @@ jobs:
 
       - name: Publish
         shell: bash
-        run: dotnet build.cs \
-          --target="publish" --nuget-key="${{secrets.NUGET_API_KEY}}"
+        run: dotnet build.cs --target="publish" --nuget-key="${{secrets.NUGET_API_KEY}}"
